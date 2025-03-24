@@ -80,20 +80,6 @@ class PointCloudViewer {
             //     ]
             // },
             {
-                thumbnail: 'assets/seq5/seq5_thumb.mp4',
-                plyFiles: [
-                    './assets/seq5/frame0.ply', './assets/seq5/frame1.ply', './assets/seq5/frame2.ply', './assets/seq5/frame3.ply', './assets/seq5/frame4.ply', 
-                    './assets/seq5/frame5.ply', './assets/seq5/frame6.ply', './assets/seq5/frame7.ply', './assets/seq5/frame8.ply', './assets/seq5/frame9.ply'
-                ]
-            },
-            {
-                thumbnail: 'assets/seq6/seq6_thumb.mp4',
-                plyFiles: [
-                    './assets/seq6/frame0.ply', './assets/seq6/frame1.ply', './assets/seq6/frame2.ply', './assets/seq6/frame3.ply', './assets/seq6/frame4.ply', 
-                    './assets/seq6/frame5.ply', './assets/seq6/frame6.ply', './assets/seq6/frame7.ply', './assets/seq6/frame8.ply', './assets/seq6/frame9.ply'
-                ]
-            },
-            {
                 thumbnail: 'assets/seq7/seq7_thumb.mp4',
                 plyFiles: [
                     './assets/seq7/frame0.ply', './assets/seq7/frame1.ply', './assets/seq7/frame2.ply', './assets/seq7/frame3.ply', './assets/seq7/frame4.ply', 
@@ -112,6 +98,20 @@ class PointCloudViewer {
                 plyFiles: [
                     './assets/seq9/frame0.ply', './assets/seq9/frame1.ply', './assets/seq9/frame2.ply', './assets/seq9/frame3.ply', './assets/seq9/frame4.ply', 
                     './assets/seq9/frame5.ply', './assets/seq9/frame6.ply', './assets/seq9/frame7.ply', './assets/seq9/frame8.ply', './assets/seq9/frame9.ply'
+                ]
+            },
+            {
+                thumbnail: 'assets/seq5/seq5_thumb.mp4',
+                plyFiles: [
+                    './assets/seq5/frame0.ply', './assets/seq5/frame1.ply', './assets/seq5/frame2.ply', './assets/seq5/frame3.ply', './assets/seq5/frame4.ply', 
+                    './assets/seq5/frame5.ply', './assets/seq5/frame6.ply', './assets/seq5/frame7.ply', './assets/seq5/frame8.ply', './assets/seq5/frame9.ply'
+                ]
+            },
+            {
+                thumbnail: 'assets/seq6/seq6_thumb.mp4',
+                plyFiles: [
+                    './assets/seq6/frame0.ply', './assets/seq6/frame1.ply', './assets/seq6/frame2.ply', './assets/seq6/frame3.ply', './assets/seq6/frame4.ply', 
+                    './assets/seq6/frame5.ply', './assets/seq6/frame6.ply', './assets/seq6/frame7.ply', './assets/seq6/frame8.ply', './assets/seq6/frame9.ply'
                 ]
             }
         ];
@@ -194,8 +194,8 @@ class PointCloudViewer {
             const thumb = document.createElement('div');
             thumb.className = 'sequence-thumbnail';
             
-            thumb.style.width = '200px';
-            thumb.style.height = '120px';
+            thumb.style.width = '400px';
+            thumb.style.height = '300px';
             
             // 创建视频元素
             const video = document.createElement('video');
@@ -204,7 +204,7 @@ class PointCloudViewer {
             video.playsinline = true;
             video.loop = true;
             video.play().catch(err => console.error('Video play failed:', err));
-            
+            video.autoplay = true;
             thumb.appendChild(video);
             thumb.onclick = () => this.loadSequence(index);
             container.appendChild(thumb);
@@ -377,7 +377,7 @@ class PointCloudViewer {
                 geometry.attributes.position
             );
             const size = bbox.getSize(new THREE.Vector3()).length();
-            const pointSize = Math.max(0.0005, size/1000);
+            const pointSize = Math.max(0.005, size/400);
 
             const material = new THREE.PointsMaterial({
                 size: pointSize,
@@ -414,7 +414,7 @@ class PointCloudViewer {
                 );
                 
                 this.camera.position.copy(center);
-                this.camera.position.z += maxDim * 0.75;
+                this.camera.position.z += maxDim * 0.65;
                 
                 this.controls.update();
                 this.isInitialLoad = false;
