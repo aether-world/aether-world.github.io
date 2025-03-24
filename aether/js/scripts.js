@@ -303,10 +303,12 @@ class PointCloudViewer {
         });
 
         // 时间轴控制
-        document.getElementById('timeline').addEventListener('input', (e) => {
-            const frame = parseInt(e.target.value);
-            document.getElementById('timeLabel').textContent = `Frame: ${frame}`;
+        const timeline = document.getElementById('timeline');
+        timeline.addEventListener('input', () => {
+            const frame = parseInt(timeline.value);
             this.loadFrame(frame);
+            // 更新帧标签 - 只显示帧号
+            document.getElementById('timeLabel').textContent = `${frame}`;
         });
 
         // 添加左右导航区域
@@ -322,7 +324,8 @@ class PointCloudViewer {
             if (currentFrame > 0) {
                 timeline.value = currentFrame - 1;
                 this.loadFrame(currentFrame - 1);
-                document.getElementById('timeLabel').textContent = `Frame: ${currentFrame - 1}`;
+                // 更新帧标签 - 只显示帧号
+                document.getElementById('timeLabel').textContent = `${currentFrame - 1}`;
             }
         });
         
@@ -336,7 +339,8 @@ class PointCloudViewer {
             if (currentFrame < maxFrame) {
                 timeline.value = currentFrame + 1;
                 this.loadFrame(currentFrame + 1);
-                document.getElementById('timeLabel').textContent = `Frame: ${currentFrame + 1}`;
+                // 更新帧标签 - 只显示帧号
+                document.getElementById('timeLabel').textContent = `${currentFrame + 1}`;
             }
         });
         
@@ -354,13 +358,19 @@ class PointCloudViewer {
             if (e.key === 'ArrowLeft' && currentFrame > 0) {
                 timeline.value = currentFrame - 1;
                 this.loadFrame(currentFrame - 1);
-                document.getElementById('timeLabel').textContent = `Frame: ${currentFrame - 1}`;
+                document.getElementById('timeLabel').textContent = `${currentFrame - 1}`;
             } else if (e.key === 'ArrowRight' && currentFrame < maxFrame) {
                 timeline.value = currentFrame + 1;
                 this.loadFrame(currentFrame + 1);
-                document.getElementById('timeLabel').textContent = `Frame: ${currentFrame + 1}`;
+                document.getElementById('timeLabel').textContent = `${currentFrame + 1}`;
             }
         });
+
+        // 添加下采样注释
+        const downsampleNote = document.createElement('div');
+        downsampleNote.className = 'downsample-note';
+        downsampleNote.innerHTML = 'Note: The point clouds are downsampled by a factor of 8 for faster loading.';
+        document.getElementById('viewport').appendChild(downsampleNote);
     }
 
     async loadSequence(index) {
@@ -373,6 +383,9 @@ class PointCloudViewer {
         const timeline = document.getElementById('timeline');
         timeline.max = this.sequences[index].plyFiles.length - 1;
         timeline.value = 0;
+        
+        // 更新帧标签 - 只显示帧号
+        document.getElementById('timeLabel').textContent = '0';
         
         // 加载第一个帧
         this.currentSequence = index;
@@ -617,8 +630,8 @@ class PointCloudViewer {
                 this.isInitialLoad = false;
             }
             
-            // 更新帧标签
-            document.getElementById('timeLabel').textContent = `Frame: ${frame}`;
+            // 更新帧标签 - 只显示帧号
+            document.getElementById('timeLabel').textContent = `${frame}`;
             
         } catch(error) {
             console.error('Failed to load PLY:', error);

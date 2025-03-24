@@ -42,19 +42,19 @@
 
     <section class="features" id="overview">
         <div class="container">
-            <h2>Key Features</h2>
+            <h2>Key Capabilities</h2>
             <div class="feature-grid">
                 <div class="feature-card">
-                    <h3>Prediction</h3>
-                    <p>Given initial observations and camera trajectories, predict the future.</p>
+                    <h3>Action-Conditioned Prediction</h3>
+                    <p>Predict future frames based on initial observation images, with optional conditions of camera trajectory actions.</p>
                 </div>
                 <div class="feature-card">
-                    <h3>Planning</h3>
-                    <p>Given initial observations and targets, generate path planning.</p>
+                    <h3>Visual Planning</h3>
+                    <p>Generate planning paths from pairs of observation and goal images.</p>
                 </div>
                 <div class="feature-card">
-                    <h3>Reconstruction</h3>
-                    <p>4D reconstruction based on given video.</p>
+                    <h3>4D Reconstruction</h3>
+                    <p>Reconstruct dynamic point clouds from videos by estimating depths and camera poses.</p>
                 </div>
             </div>
         </div>
@@ -140,26 +140,27 @@
             </div>
     </section> -->
 
-    <section class="tech-details">
+    <section class="tech-details" id="reconstruction">
         <div class="container">
             <h2>Reconstruction</h2>
-        </div>
-        <div class="pointcloud-section">
-            <!-- <div class="container"> -->
-                <div class="sequence-selector">
-                    <div class="sequence-thumbnails" id="sequenceThumbnails"></div>
-                </div>
-                
-                <div class="pointcloud-viewport" id="viewport">
-                    <div class="timeline-control">
-                        <input type="range" id="timeline" min="0" value="0" step="1">
-                        <div class="time-label" id="timeLabel">Frame: 0</div>
-                    </div>
-                </div>
-            <!-- </div> -->
+            <p class="section-description">
+                Interactive visualization of our 3D point cloud reconstruction results from monocular video.
+            </p>
         </div>
         
-
+        <!-- 点云查看器容器 - 全宽 -->
+        <div class="pointcloud-wrapper">
+            <div class="sequence-selector">
+                <div class="sequence-thumbnails" id="sequenceThumbnails"></div>
+            </div>
+            
+            <div class="pointcloud-viewport" id="viewport">
+                <div class="timeline-control">
+                    <input type="range" id="timeline" min="0" value="0" step="1">
+                    <div class="time-label" id="timeLabel">0</div>
+                </div>
+            </div>
+        </div>
     </section>
 
 
