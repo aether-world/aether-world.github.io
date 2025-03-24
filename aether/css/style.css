@@ -389,45 +389,36 @@ body {
 }
 
 .sequence-selector {
-    height: 150px;
-    background: #2a2a2a;
+    height: auto; /* 改为自适应高度 */
+    min-height: 150px;
+    background: #1a1a1a; /* 深色背景，避免白屏 */
     padding: 15px;
     overflow-x: auto;
     border-radius: 8px;
     margin-bottom: 20px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-}
-
-.sequence-thumbnails {
     display: flex;
-    gap: 20px;
+    align-items: center;
 }
 
+#sequenceThumbnails {
+    display: flex;
+    gap: 15px;
+    padding: 5px;
+}
+
+/* 视频缩略图样式 */
 .sequence-thumbnail {
     position: relative;
-    width: 200px;
-    height: 120px;
+    width: 200px; /* 固定宽度 */
+    height: 120px; /* 固定高度 */
     border: 2px solid transparent;
     cursor: pointer;
     transition: all 0.3s ease;
-    background: #333;
+    background: #1a1a1a; /* 深色背景，避免白屏 */
     border-radius: 4px;
     overflow: hidden;
-}
-
-.sequence-thumbnail img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.sequence-thumbnail video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: opacity 0.5s ease;
-    z-index: 3;
-    position: relative;
+    flex-shrink: 0; /* 防止缩略图被压缩 */
 }
 
 .thumb-loader {
@@ -437,10 +428,12 @@ body {
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
     z-index: 2;
+    transition: opacity 0.5s ease;
 }
 
 .thumb-spinner {
@@ -450,6 +443,13 @@ body {
     border-radius: 50%;
     border-top-color: white;
     animation: spin 1s ease-in-out infinite;
+    margin-bottom: 10px;
+}
+
+.thumb-loader span {
+    color: white;
+    font-size: 12px;
+    text-align: center;
 }
 
 .thumb-preview {
@@ -460,9 +460,20 @@ body {
     height: 100%;
     background-size: cover;
     background-position: center;
-    filter: blur(5px);
     transition: opacity 0.5s ease;
     z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.placeholder-text {
+    color: white;
+    font-size: 16px;
+    text-align: center;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
 }
 
 .thumb-error {
@@ -471,6 +482,15 @@ body {
     padding: 5px 10px;
     border-radius: 4px;
     font-size: 12px;
+}
+
+.sequence-thumbnail video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.5s ease;
+    z-index: 3;
+    position: relative;
 }
 
 .sequence-thumbnail.active {
@@ -678,4 +698,57 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+}
+
+/* 预加载指示器 */
+.preload-indicator {
+    position: absolute;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #00a8ff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 100;
+    transition: opacity 0.5s ease;
+}
+
+/* 时间轴加载状态标记 */
+.timeline-loading-marker {
+    position: absolute;
+    bottom: 6px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateX(-50%);
+    z-index: 101;
+}
+
+.timeline-loading-marker.loading {
+    background-color: #ffcc00;
+}
+
+.timeline-loading-marker.loaded {
+    background-color: #00cc66;
+}
+
+/* 视频加载进度条 */
+.video-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 4;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0;
+    background-color: #00a8ff;
+    transition: width 0.3s ease;
 }
