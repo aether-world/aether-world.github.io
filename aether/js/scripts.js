@@ -76,20 +76,20 @@ class PointCloudViewer {
     constructor() {
         this.sequences = [
             {
-                thumbnail: 'assets/output.mp4',
-                plyFiles: ['./assets/seq1/frame0.ply','./assets/seq1/frame0.ply','./assets/seq1/frame0.ply','./assets/seq1/frame0.ply','./assets/seq1/frame0.ply', './assets/seq1/frame3.ply']
+                thumbnail: 'assets/seq1_thumb.mp4',
+                plyFiles: ['./assets/seq1/frame0.ply','./assets/seq1/frame0.ply','./assets/seq1/frame0.ply','./assets/seq1/frame0.ply','./assets/seq1/frame0.ply', './assets/seq1/frame2.ply']
             },
             {
-                thumbnail: 'assets/seq1_thumb.jpg',
-                plyFiles: ['./assets/seq1/frame0.ply', './assets/seq1/frame3.ply']
+                thumbnail: 'assets/seq1_thumb.mp4',
+                plyFiles: ['./assets/seq1/frame0.ply', './assets/seq1/frame2.ply']
             },
             {
-                thumbnail: 'assets/seq1_thumb.jpg',
-                plyFiles: ['./assets/seq1/frame0.ply', './assets/seq1/frame3.ply']
+                thumbnail: 'assets/seq1_thumb.mp4',
+                plyFiles: ['./assets/seq1/frame0.ply', './assets/seq1/frame2.ply']
             },
             {
-                thumbnail: 'assets/seq1_thumb.jpg',
-                plyFiles: ['./assets/seq1/frame0.ply', './assets/seq1/frame3.ply']
+                thumbnail: 'assets/seq1_thumb.mp4',
+                plyFiles: ['./assets/seq1/frame0.ply', './assets/seq1/frame2.ply']
             },
             // 添加更多序列...
         ];
