@@ -184,10 +184,11 @@ class PointCloudViewer {
             this.scene.add(points);
             
             // 自动调整视角
-            const box = new THREE.Box3().setFromObject(points);
-            const center = box.getCenter(new THREE.Vector3());
-            this.controls.target.copy(center);
-            this.camera.position.copy(center).add(new THREE.Vector3(0,0,5));
+            // const box = new THREE.Box3().setFromObject(points);
+            // const center = box.getCenter(new THREE.Vector3());
+            // this.controls.target.copy(center);
+            this.controls.target.set(0, 0, 0); // 将控制器的目标点设置为原点
+            this.camera.position.copy(center).add(new THREE.Vector3(0,0,10));
         } catch(error) {
             console.error('Failed to load PLY:', error);
         }
