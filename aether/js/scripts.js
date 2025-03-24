@@ -193,7 +193,8 @@ class PointCloudViewer {
                 // const center = box.getCenter(new THREE.Vector3());
                 // this.controls.target.copy(center);
                 this.controls.target.set(0, 0, 0); // 将控制器的目标点设置为原点
-                this.camera.position.copy(center).add(new THREE.Vector3(0,0,5));
+                // this.camera.position.copy(center).add(new THREE.Vector3(0,0,5));
+                this.camera.position.set(0, 0, 5);
                 this.isInitialLoad = false; // 取消初始加载标志
             }
         } catch(error) {
