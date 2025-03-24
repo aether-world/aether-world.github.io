@@ -97,6 +97,8 @@ class PointCloudViewer {
         this.initThreeJS();
         this.initUI();
         this.loadSequence(0);
+
+        this.isInitialLoad = true; // 标志位，用于判断是否是第一次加载
     }
 
     initThreeJS() {
@@ -158,6 +160,7 @@ class PointCloudViewer {
         // 加载第一个帧
         this.currentSequence = index;
         this.loadFrame(0);
+        this.isInitialLoad = true; // 标记为初始加载
     }
 
     async loadFrame(frame) {
@@ -182,13 +185,17 @@ class PointCloudViewer {
             
             const points = new THREE.Points(geometry, material);
             this.scene.add(points);
+
+            if (this.isInitialLoad) {
             
-            // 自动调整视角
-            // const box = new THREE.Box3().setFromObject(points);
-            // const center = box.getCenter(new THREE.Vector3());
-            // this.controls.target.copy(center);
-            this.controls.target.set(0, 0, 0); // 将控制器的目标点设置为原点
-            this.camera.position.copy(center).add(new THREE.Vector3(0,0,10));
+                // 自动调整视角
+                // const box = new THREE.Box3().setFromObject(points);
+                // const center = box.getCenter(new THREE.Vector3());
+                // this.controls.target.copy(center);
+                this.controls.target.set(0, 0, 0); // 将控制器的目标点设置为原点
+                this.camera.position.copy(center).add(new THREE.Vector3(0,0,5));
+                this.isInitialLoad = false; // 取消初始加载标志
+            }
         } catch(error) {
             console.error('Failed to load PLY:', error);
         }
