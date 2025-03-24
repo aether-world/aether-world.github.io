@@ -241,24 +241,35 @@ body {
     overflow: hidden;
 }
 
-.carousel-container {
-    width: 100%;
-    overflow: hidden;
+.video-carousel-container {
+    position: relative;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 20px;
 }
 
 .carousel-track {
     display: flex;
-    transition: transform 0.5s ease-out;
+    transition: transform 0.5s ease;
     will-change: transform;
+    gap: 30px; /* 使用gap替代padding来设置间距 */
+    padding: 0; /* 移除原有的padding */
 }
 
 .carousel-item {
-    flex: 0 0 100vw;
-    min-width: 100vw;
-    height: 80vh;
-    scroll-snap-align: start;
-    background: #000;
+    flex: 0 0 70%;
+    width: 70%; /* 添加明确的宽度 */
+    min-width: 70%;
     position: relative;
+    transform: scale(0.8);
+    opacity: 0.5;
+    transition: all 0.5s ease;
+    background: transparent;
+}
+
+.carousel-item.active {
+    transform: scale(1);
+    opacity: 1;
 }
 
 .video-container {
@@ -269,10 +280,13 @@ body {
     height: 100%;
 }
 
-.video-container video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.carousel-video {
+    display: block;
+    width: auto;
+    height: auto;
+    object-fit: none;
+    opacity: 1;
+    transition: opacity 0.3s ease;
 }
 
 .carousel-item h3 {
@@ -833,4 +847,180 @@ body {
 /* 确保reconstruction部分与其他部分有相同的内边距 */
 #reconstruction.tech-details {
     padding: 5rem 0;
+}
+
+/* 视频展示区域 - 全宽设计 */
+.video-showcase {
+    width: 100%;
+    padding: 2rem 0;
+    background-color: #f8f9fa;
+    overflow: hidden;
+}
+
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.planning-grid {
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+}
+
+.video-item {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.video-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.video-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .video-grid {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+    }
+    
+    .planning-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 视频轮播样式 - 更新版 */
+.video-carousel-section {
+    width: 100%;
+    padding: 2rem 0;
+    background: #f8f9fa;
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.video-carousel-container {
+    position: relative;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.carousel-video-container {
+    width: auto;
+    height: auto;
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* 添加占位容器样式 */
+.carousel-placeholder {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #000; /* 黑色背景 */
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.carousel-video {
+    display: block;
+    width: auto;
+    height: auto;
+    object-fit: none;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* 导航控制区域 */
+.carousel-controls {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.carousel-nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(240, 240, 240, 0.8);
+    color: #333;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.carousel-nav-button:hover {
+    background: rgba(0, 102, 204, 0.8);
+    color: white;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-nav-button.prev {
+    left: -50px;
+}
+
+.carousel-nav-button.next {
+    right: -50px;
+}
+
+.carousel-indicators {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+}
+
+.indicator-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicator-dot:hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.indicator-dot.active {
+    background: #0066cc;
+    transform: scale(1.2);
+}
+
+@media (max-width: 768px) {
+    .carousel-nav-button {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
 }

@@ -413,3 +413,191 @@ document.addEventListener('DOMContentLoaded', () => {
     const viewer = new PointCloudViewer();
     viewer.animate();
 });
+
+class VideoCarousel {
+    constructor(containerId, videos, options = {}) {
+        this.container = document.getElementById(containerId);
+        this.videos = videos;
+        this.currentIndex = 0;
+        this.options = {
+            autoplay: true,
+            loop: true,
+            muted: true,
+            ...options
+        };
+        
+        // 修改预加载逻辑
+        this.videoElements = new Map();
+        this.preloadVideos();
+        this.init();
+    }
+    
+    preloadVideos() {
+        this.videos.forEach((video, index) => {
+            const videoElement = document.createElement('video');
+            videoElement.src = video.src;
+            videoElement.preload = 'auto';
+            videoElement.muted = this.options.muted;
+            videoElement.playsInline = true;
+            videoElement.loop = this.options.loop;
+            videoElement.style.display = 'none';
+            videoElement.className = 'carousel-video';
+            
+            // 将视频元素存储在 Map 中
+            this.videoElements.set(index, videoElement);
+            
+            // 添加到 DOM 中但保持隐藏
+            document.body.appendChild(videoElement);
+        });
+    }
+    
+    init() {
+        // 创建轮播结构
+        this.carousel = document.createElement('div');
+        this.carousel.className = 'video-carousel-container';
+        
+        // 创建视频容器
+        this.videoContainer = document.createElement('div');
+        this.videoContainer.className = 'carousel-video-container';
+        
+        // 使用第一个视频初始化
+        this.currentVideo = this.videoElements.get(0);
+        this.currentVideo.style.display = 'block';
+        
+        // 添加导航按钮
+        this.prevButton = document.createElement('button');
+        this.prevButton.className = 'carousel-nav-button prev';
+        this.prevButton.innerHTML = '&#10094;';
+        this.prevButton.addEventListener('click', () => this.navigate(-1));
+        
+        this.nextButton = document.createElement('button');
+        this.nextButton.className = 'carousel-nav-button next';
+        this.nextButton.innerHTML = '&#10095;';
+        this.nextButton.addEventListener('click', () => this.navigate(1));
+        
+        // 添加指示器
+        this.indicators = document.createElement('div');
+        this.indicators.className = 'carousel-indicators';
+        
+        // 组装DOM
+        this.videoContainer.appendChild(this.currentVideo);
+        this.carousel.appendChild(this.videoContainer);
+        this.carousel.appendChild(this.prevButton);
+        this.carousel.appendChild(this.nextButton);
+        this.carousel.appendChild(this.indicators);
+        
+        this.container.appendChild(this.carousel);
+        
+        this.createIndicators();
+        
+        // 播放第一个视频
+        this.currentVideo.play().catch(err => console.error('Video play failed:', err));
+    }
+
+    navigate(direction) {
+        let newIndex = this.currentIndex + direction;
+        
+        // 实现循环切换
+        if (newIndex < 0) {
+            newIndex = this.videos.length - 1;
+        } else if (newIndex >= this.videos.length) {
+            newIndex = 0;
+        }
+        
+        // 获取新的视频元素
+        const nextVideo = this.videoElements.get(newIndex);
+        if (!nextVideo) return;
+        
+        // 准备新视频
+        nextVideo.style.opacity = '0';
+        nextVideo.style.display = 'block';
+        
+        // 确保新视频已加载并准备播放
+        const playNewVideo = () => {
+            // 停止当前视频
+            this.currentVideo.pause();
+            this.currentVideo.style.display = 'none';
+            
+            // 播放新视频
+            nextVideo.style.opacity = '1';
+            nextVideo.currentTime = 0;
+            nextVideo.play().catch(err => console.error('Video play failed:', err));
+            
+            // 更新当前视频引用
+            this.currentVideo = nextVideo;
+            this.currentIndex = newIndex;
+            this.updateIndicators();
+            
+            // 确保视频在正确的容器中
+            if (nextVideo.parentElement !== this.videoContainer) {
+                this.videoContainer.appendChild(nextVideo);
+            }
+        };
+        
+        if (nextVideo.readyState >= 3) {
+            playNewVideo();
+        } else {
+            nextVideo.addEventListener('canplay', playNewVideo, { once: true });
+        }
+    }
+
+    createIndicators() {
+        this.indicators.innerHTML = '';
+        this.videos.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'indicator-dot';
+            if (index === this.currentIndex) {
+                dot.classList.add('active');
+            }
+            dot.addEventListener('click', () => {
+                if (index > this.currentIndex) {
+                    this.navigate(index - this.currentIndex);
+                } else if (index < this.currentIndex) {
+                    this.navigate(-(this.currentIndex - index));
+                }
+            });
+            this.indicators.appendChild(dot);
+        });
+    }
+
+    updateIndicators() {
+        const dots = this.indicators.querySelectorAll('.indicator-dot');
+        dots.forEach((dot, i) => {
+            if (i === this.currentIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    updateNavigationButtons() {
+        this.prevButton.style.display = 'block';
+        this.nextButton.style.display = 'block';
+    }
+}
+
+// 初始化轮播
+document.addEventListener('DOMContentLoaded', function() {
+    // ... existing code ...
+    
+    // 初始化预测视频轮播
+    const predictionVideos = [
+        { src: 'assets/backward.mp4' },
+        { src: 'assets/forward_right.mp4' },
+        { src: 'assets/left_forward.mp4' },
+        { src: 'assets/right.mp4' }
+    ];
+    
+    const predictionCarousel = new VideoCarousel('prediction-carousel', predictionVideos);
+    
+    // 初始化规划视频轮播
+    const planningVideos = [
+        { src: 'assets/planning_1.mp4' },
+        { src: 'assets/planning_2.mp4' },
+        { src: 'assets/planning_3.mp4' },
+        { src: 'assets/planning_4.mp4' }
+    ];
+    
+    const planningCarousel = new VideoCarousel('planning-carousel', planningVideos);
+});
