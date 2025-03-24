@@ -72,13 +72,48 @@ document.addEventListener('DOMContentLoaded', function() {
 class PointCloudViewer {
     constructor() {
         this.sequences = [
+            // {
+            //     thumbnail: 'assets/seq2_thumb.mp4',
+            //     plyFiles: [
+            //         './assets/seq2/frame1.ply', './assets/seq2/frame2.ply', './assets/seq2/frame3.ply', './assets/seq2/frame4.ply', './assets/seq2/frame5.ply', 
+            //         './assets/seq2/frame6.ply', './assets/seq2/frame7.ply', './assets/seq2/frame8.ply', './assets/seq2/frame9.ply', './assets/seq2/frame10.ply'
+            //     ]
+            // },
             {
-                thumbnail: 'assets/seq2_thumb.mp4',
+                thumbnail: 'assets/seq5/seq5_thumb.mp4',
                 plyFiles: [
-                    './assets/seq2/frame1.ply', './assets/seq2/frame2.ply', './assets/seq2/frame3.ply', './assets/seq2/frame4.ply', './assets/seq2/frame5.ply', 
-                    './assets/seq2/frame6.ply', './assets/seq2/frame7.ply', './assets/seq2/frame8.ply', './assets/seq2/frame9.ply', './assets/seq2/frame10.ply'
+                    './assets/seq5/frame0.ply', './assets/seq5/frame1.ply', './assets/seq5/frame2.ply', './assets/seq5/frame3.ply', './assets/seq5/frame4.ply', 
+                    './assets/seq5/frame5.ply', './assets/seq5/frame6.ply', './assets/seq5/frame7.ply', './assets/seq5/frame8.ply', './assets/seq5/frame9.ply'
                 ]
             },
+            {
+                thumbnail: 'assets/seq6/seq6_thumb.mp4',
+                plyFiles: [
+                    './assets/seq6/frame0.ply', './assets/seq6/frame1.ply', './assets/seq6/frame2.ply', './assets/seq6/frame3.ply', './assets/seq6/frame4.ply', 
+                    './assets/seq6/frame5.ply', './assets/seq6/frame6.ply', './assets/seq6/frame7.ply', './assets/seq6/frame8.ply', './assets/seq6/frame9.ply'
+                ]
+            },
+            {
+                thumbnail: 'assets/seq7/seq7_thumb.mp4',
+                plyFiles: [
+                    './assets/seq7/frame0.ply', './assets/seq7/frame1.ply', './assets/seq7/frame2.ply', './assets/seq7/frame3.ply', './assets/seq7/frame4.ply', 
+                    './assets/seq7/frame5.ply', './assets/seq7/frame6.ply', './assets/seq7/frame7.ply', './assets/seq7/frame8.ply', './assets/seq7/frame9.ply'
+                ]
+            },
+            {
+                thumbnail: 'assets/seq8/seq8_thumb.mp4',
+                plyFiles: [
+                    './assets/seq8/frame0.ply', './assets/seq8/frame1.ply', './assets/seq8/frame2.ply', './assets/seq8/frame3.ply', './assets/seq8/frame4.ply', 
+                    './assets/seq8/frame5.ply', './assets/seq8/frame6.ply', './assets/seq8/frame7.ply', './assets/seq8/frame8.ply', './assets/seq8/frame9.ply'
+                ]
+            },
+            {
+                thumbnail: 'assets/seq9/seq9_thumb.mp4',
+                plyFiles: [
+                    './assets/seq9/frame0.ply', './assets/seq9/frame1.ply', './assets/seq9/frame2.ply', './assets/seq9/frame3.ply', './assets/seq9/frame4.ply', 
+                    './assets/seq9/frame5.ply', './assets/seq9/frame6.ply', './assets/seq9/frame7.ply', './assets/seq9/frame8.ply', './assets/seq9/frame9.ply'
+                ]
+            }
         ];
         
         this.initThreeJS();
@@ -608,19 +643,19 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 初始化团队成员数据 - 重新排列为两排，每排5人
     const firstRow = [
-        { image: 'assets/team/zhuhaoyi.jpg', name: '朱皓怡', link: 'https://www.haoyizhu.site' },
-        { image: 'assets/team/wangyifan.jpg', name: '王一凡', link: 'https://github.com/yyfz' },
-        { image: 'assets/team/zhoujianjun.jpg', name: '周健均', link: 'https://zhoutimemachine.github.io/' },
-        { image: 'assets/team/changwenzheng.jpg', name: '常文正', link: 'https://github.com/AmberHeart' },
-        { image: 'assets/team/zhouyang.jpg', name: '周洋', link: 'https://github.com/yangzhou24' }
+        { image: 'assets/team/zhuhaoyi.jpg', name: 'Haoyi Zhu', link: 'https://www.haoyizhu.site' },
+        { image: 'assets/team/wangyifan.jpg', name: 'Yifan Wang', link: 'https://github.com/yyfz' },
+        { image: 'assets/team/zhoujianjun.jpg', name: 'Jianjun Zhou', link: 'https://zhoutimemachine.github.io/' },
+        { image: 'assets/team/changwenzheng.jpg', name: 'Wenzheng Chang', link: 'https://github.com/AmberHeart' },
+        { image: 'assets/team/zhouyang.jpg', name: 'Yang Zhou', link: 'https://github.com/yangzhou24' }
     ];
     
     const secondRow = [
-        { image: 'assets/team/lizizun.jpg', name: '李秭尊', link: 'https://github.com/LiZizun' },
-        { image: 'assets/team/chenjunyi.jpg', name: '陈俊佚', link: 'https://github.com/SOTAMak1r' },
-        { image: 'assets/team/shenchunhua.jpg', name: '沈春华', link: 'https://cshen.github.io/' },
-        { image: 'assets/team/pangjiangmiao.jpg', name: '庞江淼', link: 'https://oceanpang.github.io/' },
-        { image: 'assets/team/tonghe.jpg', name: '贺通', link: 'https://tonghe90.github.io' }
+        { image: 'assets/team/lizizun.jpg', name: 'Zizun Li', link: 'https://github.com/LiZizun' },
+        { image: 'assets/team/chenjunyi.jpg', name: 'Junyi Chen', link: 'https://github.com/SOTAMak1r' },
+        { image: 'assets/team/shenchunhua.jpg', name: 'Chunhua Shen', link: 'https://cshen.github.io/' },
+        { image: 'assets/team/pangjiangmiao.jpg', name: 'Jiangmiao Pang', link: 'https://oceanpang.github.io/' },
+        { image: 'assets/team/tonghe.jpg', name: 'Tong He', link: 'https://tonghe90.github.io' }
     ];
     
     // 创建团队展示函数
