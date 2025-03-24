@@ -383,7 +383,9 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    /* width: 80%; */
     background: #1a1a1a;
+    /* padding: 50px 30px; */
 }
 
 .sequence-selector {
@@ -413,6 +415,12 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+.sequence-thumbnail video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 保持视频比例，同时覆盖整个容器 */
 }
 
 .sequence-thumbnail.active {

@@ -76,7 +76,7 @@ class PointCloudViewer {
     constructor() {
         this.sequences = [
             {
-                thumbnail: 'assets/seq1_thumb.jpg',
+                thumbnail: 'assets/output.mp4',
                 plyFiles: ['./assets/seq1/frame0.ply','./assets/seq1/frame0.ply','./assets/seq1/frame0.ply','./assets/seq1/frame0.ply','./assets/seq1/frame0.ply', './assets/seq1/frame3.ply']
             },
             {
@@ -130,7 +130,8 @@ class PointCloudViewer {
         this.sequences.forEach((seq, index) => {
             const thumb = document.createElement('div');
             thumb.className = 'sequence-thumbnail';
-            thumb.innerHTML = `<img src="${seq.thumbnail}">`;
+            // thumb.innerHTML = `<img src="${seq.thumbnail}">`;
+            thumb.innerHTML = `<video src="${seq.thumbnail}" autoplay loop muted playsinline>`;   //<video id="demoVideo" ></video>
             thumb.onclick = () => this.loadSequence(index);
             container.appendChild(thumb);
         });
