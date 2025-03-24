@@ -13,7 +13,8 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 5px 20px;
+    /* padding: 5px 20px; */
+    padding: 0 1rem;
 }
 
 .navbar {
@@ -224,6 +225,10 @@ body {
     
     .nav-links {
         display: none;
+    }
+
+    .pointcloud-section .container {
+        padding: 0;
     }
 }
 

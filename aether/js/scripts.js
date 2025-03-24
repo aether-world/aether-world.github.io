@@ -79,6 +79,18 @@ class PointCloudViewer {
                 thumbnail: 'assets/seq1_thumb.jpg',
                 plyFiles: ['./assets/seq1/frame0.ply', './assets/seq1/frame3.ply']
             },
+            {
+                thumbnail: 'assets/seq1_thumb.jpg',
+                plyFiles: ['./assets/seq1/frame0.ply', './assets/seq1/frame3.ply']
+            },
+            {
+                thumbnail: 'assets/seq1_thumb.jpg',
+                plyFiles: ['./assets/seq1/frame0.ply', './assets/seq1/frame3.ply']
+            },
+            {
+                thumbnail: 'assets/seq1_thumb.jpg',
+                plyFiles: ['./assets/seq1/frame0.ply', './assets/seq1/frame3.ply']
+            },
             // 添加更多序列...
         ];
         
