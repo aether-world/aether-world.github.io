@@ -599,7 +599,7 @@ body {
     color: rgba(255, 255, 255, 0.9);
     padding: 8px 12px;
     border-radius: 6px;
-    font-size: 12px;
+    font-size: 16px;
     white-space: nowrap; /* 确保单行显示 */
     overflow: hidden;
     text-overflow: ellipsis; /* 如果文本过长，显示省略号 */
@@ -703,20 +703,6 @@ body {
     padding: 0 20px;
 }
 
-/* 预加载指示器 */
-.preload-indicator {
-    position: absolute;
-    bottom: 70px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgba(0, 0, 0, 0.6);
-    color: #00a8ff;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 12px;
-    z-index: 100;
-    transition: opacity 0.5s ease;
-}
 
 /* 时间轴加载状态标记 */
 .timeline-loading-marker {
