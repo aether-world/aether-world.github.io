@@ -1,6 +1,3 @@
-
-
-
 document.addEventListener('DOMContentLoaded', function() {
     // 视频控制
     // const video = document.getElementById('demoVideo');
@@ -119,13 +116,48 @@ class PointCloudViewer {
         document.getElementById('viewport').appendChild(this.renderer.domElement);
 
         // 设置相机和灯光
-        this.camera.position.z = 5;
+        this.camera.position.z = 2; // 调整初始相机距离，使点云更合适
         this.scene.add(new THREE.AmbientLight(0xffffff, 0.8));
         
         // 添加轨道控制器
         this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.05;
+
+        // 默认禁用滚轮缩放
+        this.controls.enableZoom = false;
+        
+        // 添加提示元素 - 放在上方
+        const zoomHint = document.createElement('div');
+        zoomHint.className = 'zoom-hint';
+        zoomHint.innerHTML = 'Hold Shift + Scroll to zoom'; // 英文提示
+        zoomHint.style.display = 'none';
+        document.getElementById('viewport').appendChild(zoomHint);
+        
+        // 监听键盘事件
+        window.addEventListener('keydown', (e) => {
+            if (e.shiftKey) {
+                this.controls.enableZoom = true;
+                zoomHint.style.display = 'block';
+            }
+        });
+        
+        window.addEventListener('keyup', (e) => {
+            if (!e.shiftKey) {
+                this.controls.enableZoom = false;
+                zoomHint.style.display = 'none';
+            }
+        });
+
+        // 鼠标进入viewport时显示提示
+        document.getElementById('viewport').addEventListener('mouseenter', () => {
+            zoomHint.style.display = 'block';
+            setTimeout(() => {
+                if (!this.controls.enableZoom) {
+                    zoomHint.style.display = 'none';
+                }
+            }, 5000); // 5秒后自动隐藏提示
+        });
 
         // 窗口大小变化处理
         window.addEventListener('resize', () => {
@@ -173,6 +205,12 @@ class PointCloudViewer {
     }
 
     async loadFrame(frame) {
+        // 显示加载指示器
+        const loadingIndicator = document.createElement('div');
+        loadingIndicator.className = 'loading-indicator';
+        loadingIndicator.innerHTML = '<div class="spinner"></div><span>Loading point cloud...</span>';
+        document.getElementById('viewport').appendChild(loadingIndicator);
+        
         // 清除旧点云
         this.scene.children.slice().forEach(obj => {
             if(obj instanceof THREE.Points) this.scene.remove(obj);
@@ -187,27 +225,63 @@ class PointCloudViewer {
                 loader.load(url, resolve, undefined, reject);
             });
 
+            // 移除加载指示器
+            document.querySelector('.loading-indicator')?.remove();
+            
+            // 计算合适的点大小 - 减小点大小
+            const bbox = new THREE.Box3().setFromBufferAttribute(
+                geometry.attributes.position
+            );
+            const size = bbox.getSize(new THREE.Vector3()).length();
+            const pointSize = Math.max(0.0005, size/1000); // 将点大小减小为原来的一半
+
             const material = new THREE.PointsMaterial({
-                size: 0.05,
-                vertexColors: geometry.hasAttribute('color')
+                size: pointSize,
+                vertexColors: geometry.hasAttribute('color'),
+                sizeAttenuation: true,
+                transparent: true,
+                opacity: 0.9 // 
+                // depthWrite: false // 改善点的渲染
             });
             
             const points = new THREE.Points(geometry, material);
             this.scene.add(points);
 
             if (this.isInitialLoad) {
-            
                 // 自动调整视角
-                // const box = new THREE.Box3().setFromObject(points);
-                // const center = box.getCenter(new THREE.Vector3());
-                // this.controls.target.copy(center);
-                this.controls.target.set(0, 0, 0); // 将控制器的目标点设置为原点
-                // this.camera.position.copy(center).add(new THREE.Vector3(0,0,5));
-                this.camera.position.set(0, 0, 5);
-                this.isInitialLoad = false; // 取消初始加载标志
+                const center = bbox.getCenter(new THREE.Vector3());
+                this.controls.target.copy(center);
+                
+                // 设置相机位置，使点云完全可见
+                const maxDim = Math.max(
+                    bbox.max.x - bbox.min.x,
+                    bbox.max.y - bbox.min.y,
+                    bbox.max.z - bbox.min.z
+                );
+                
+                // 调整相机位置，使点云在视野中居中且大小合适
+                this.camera.position.copy(center);
+                this.camera.position.z += maxDim * 0.75; // 调整系数以获得合适的视图
+                
+                // 更新控制器
+                this.controls.update();
+                
+                // 关闭初始加载标志
+                this.isInitialLoad = false;
             }
+            
+            // 更新帧标签
+            document.getElementById('timeLabel').textContent = `Frame: ${frame}`;
+            
         } catch(error) {
             console.error('Failed to load PLY:', error);
+            // 显示错误信息
+            document.querySelector('.loading-indicator')?.remove();
+            const errorMsg = document.createElement('div');
+            errorMsg.className = 'error-message';
+            errorMsg.innerHTML = 'Failed to load point cloud';
+            document.getElementById('viewport').appendChild(errorMsg);
+            setTimeout(() => errorMsg.remove(), 3000);
         }
     }
     // async loadFrame(frame) {
