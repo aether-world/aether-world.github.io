@@ -539,30 +539,24 @@ class PointCloudViewer {
     }
 
     async loadFrame(frame) {
-        // 显示加载指示器
-        const loadingIndicator = document.createElement('div');
-        loadingIndicator.className = 'loading-indicator';
-        loadingIndicator.innerHTML = '<div class="spinner"></div><span>Loading point cloud...</span>';
-        document.getElementById('viewport').appendChild(loadingIndicator);
-        
-        // 清除旧点云
-        this.scene.children.slice().forEach(obj => {
-            if(obj instanceof THREE.Points) this.scene.remove(obj);
-        });
-
         // 获取当前序列和URL
         const url = this.sequences[this.currentSequence].plyFiles[frame];
         let geometry;
+        let loadingIndicator;
         
         try {
             // 检查是否已预加载
             if (this.preloadStatus && this.preloadStatus.cache[url]) {
-                // 使用缓存的几何体
+                // 使用缓存的几何体，不显示加载提示
                 geometry = this.preloadStatus.cache[url];
-                // 移除加载指示器
-                document.querySelector('.loading-indicator')?.remove();
             } else {
-                // 未预加载，正常加载
+                // 未预加载时才显示加载提示
+                loadingIndicator = document.createElement('div');
+                loadingIndicator.className = 'loading-indicator';
+                loadingIndicator.innerHTML = '<div class="spinner"></div><span>Loading point cloud...</span>';
+                document.getElementById('viewport').appendChild(loadingIndicator);
+                
+                // 正常加载
                 const loader = new THREE.PLYLoader();
                 geometry = await new Promise((resolve, reject) => {
                     loader.load(url, resolve, undefined, reject);
@@ -574,8 +568,13 @@ class PointCloudViewer {
                 }
                 
                 // 移除加载指示器
-                document.querySelector('.loading-indicator')?.remove();
+                loadingIndicator?.remove();
             }
+            
+            // 清除旧点云
+            this.scene.children.slice().forEach(obj => {
+                if(obj instanceof THREE.Points) this.scene.remove(obj);
+            });
             
             // 计算合适的点大小
             const bbox = new THREE.Box3().setFromBufferAttribute(
@@ -636,7 +635,7 @@ class PointCloudViewer {
         } catch(error) {
             console.error('Failed to load PLY:', error);
             // 显示错误信息
-            document.querySelector('.loading-indicator')?.remove();
+            loadingIndicator?.remove();
             const errorMsg = document.createElement('div');
             errorMsg.className = 'error-message';
             errorMsg.innerHTML = 'Failed to load point cloud';
