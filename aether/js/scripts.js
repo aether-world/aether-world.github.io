@@ -75,22 +75,31 @@ document.addEventListener('DOMContentLoaded', function() {
 class PointCloudViewer {
     constructor() {
         this.sequences = [
+            // {
+            //     thumbnail: 'assets/seq1_thumb.mp4',
+            //     plyFiles: ['./assets/seq1/frame0.ply','./assets/seq1/frame0.ply','./assets/seq1/frame0.ply','./assets/seq1/frame0.ply','./assets/seq1/frame0.ply', './assets/seq1/frame2.ply']
+            // },
+            // {
+            //     thumbnail: 'assets/seq1_thumb.mp4',
+            //     plyFiles: ['./assets/seq1/frame0.ply', './assets/seq1/frame2.ply']
+            // },
+            // {
+            //     thumbnail: 'assets/seq1_thumb.mp4',
+            //     plyFiles: ['./assets/seq1/frame0.ply', './assets/seq1/frame2.ply']
+            // },
+            // {
+            //     thumbnail: 'assets/seq1_thumb.mp4',
+            //     plyFiles: ['./assets/seq1/frame0.ply', './assets/seq1/frame2.ply']
+            // },
+
             {
-                thumbnail: 'assets/seq1_thumb.mp4',
-                plyFiles: ['./assets/seq1/frame0.ply','./assets/seq1/frame0.ply','./assets/seq1/frame0.ply','./assets/seq1/frame0.ply','./assets/seq1/frame0.ply', './assets/seq1/frame2.ply']
+                thumbnail: 'assets/seq2_thumb.mp4',
+                plyFiles: [
+                    './assets/seq2/frame1.ply', './assets/seq2/frame2.ply', './assets/seq2/frame3.ply', './assets/seq2/frame4.ply', './assets/seq2/frame5.ply', 
+                    './assets/seq2/frame6.ply', './assets/seq2/frame7.ply', './assets/seq2/frame8.ply', './assets/seq2/frame9.ply', './assets/seq2/frame10.ply'
+                ]
             },
-            {
-                thumbnail: 'assets/seq1_thumb.mp4',
-                plyFiles: ['./assets/seq1/frame0.ply', './assets/seq1/frame2.ply']
-            },
-            {
-                thumbnail: 'assets/seq1_thumb.mp4',
-                plyFiles: ['./assets/seq1/frame0.ply', './assets/seq1/frame2.ply']
-            },
-            {
-                thumbnail: 'assets/seq1_thumb.mp4',
-                plyFiles: ['./assets/seq1/frame0.ply', './assets/seq1/frame2.ply']
-            },
+
             // 添加更多序列...
         ];
         
