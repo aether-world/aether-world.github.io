@@ -83,8 +83,13 @@ class PointCloudViewer {
         
         this.initThreeJS();
         this.initUI();
-        this.loadSequence(0);
+        this.cache = new Map();
+        this.currentSequence = 0;
         this.isInitialLoad = true;
+        this.isPreloading = false;
+        
+        // 加载第一个序列并开始预加载
+        this.loadSequence(0);
     }
 
     initThreeJS() {
@@ -238,7 +243,7 @@ class PointCloudViewer {
         document.getElementById('viewport').appendChild(downsampleNote);
     }
 
-    loadSequence(index) {
+    async loadSequence(index) {
         // 更新UI状态
         document.querySelectorAll('.sequence-thumbnail').forEach(t => 
             t.classList.remove('active'));
@@ -254,6 +259,39 @@ class PointCloudViewer {
         this.currentSequence = index;
         this.isInitialLoad = true;
         this.loadFrame(0);
+        
+        // 开始预加载当前序列的所有帧
+        this.preloadSequence(index);
+    }
+
+    async preloadSequence(index) {
+        if (this.isPreloading) return;
+        this.isPreloading = true;
+
+        const loadingNote = document.createElement('div');
+        loadingNote.className = 'preloading-note';
+        loadingNote.innerHTML = 'Preloading sequence...';
+        document.getElementById('viewport').appendChild(loadingNote);
+
+        try {
+            const files = this.sequences[index].plyFiles;
+            const loader = new THREE.PLYLoader();
+
+            for (let i = 0; i < files.length; i++) {
+                const url = files[i];
+                if (!this.cache.has(url)) {
+                    const geometry = await new Promise((resolve, reject) => {
+                        loader.load(url, resolve, undefined, reject);
+                    });
+                    this.cache.set(url, geometry);
+                }
+            }
+        } catch (error) {
+            console.error('Preloading failed:', error);
+        } finally {
+            this.isPreloading = false;
+            loadingNote.remove();
+        }
     }
 
     async loadFrame(frame) {
@@ -262,20 +300,32 @@ class PointCloudViewer {
         let loadingIndicator;
         
         try {
-            // 显示加载提示
-            loadingIndicator = document.createElement('div');
-            loadingIndicator.className = 'loading-indicator';
-            loadingIndicator.innerHTML = '<div class="spinner"></div><span>Loading point cloud...</span>';
-            document.getElementById('viewport').appendChild(loadingIndicator);
+            // 检查缓存中是否已有该帧
+            if (this.cache.has(url)) {
+                geometry = this.cache.get(url);
+            } else {
+                // 只有当加载当前要显示的帧时才显示加载提示
+                if (!this.isPreloading) {
+                    loadingIndicator = document.createElement('div');
+                    loadingIndicator.className = 'loading-indicator';
+                    loadingIndicator.innerHTML = '<div class="spinner"></div><span>Loading point cloud...</span>';
+                    document.getElementById('viewport').appendChild(loadingIndicator);
+                }
+                
+                // 加载PLY文件
+                const loader = new THREE.PLYLoader();
+                geometry = await new Promise((resolve, reject) => {
+                    loader.load(url, resolve, undefined, reject);
+                });
+                
+                // 存入缓存
+                this.cache.set(url, geometry);
+            }
             
-            // 加载PLY文件
-            const loader = new THREE.PLYLoader();
-            geometry = await new Promise((resolve, reject) => {
-                loader.load(url, resolve, undefined, reject);
-            });
-            
-            // 移除加载指示器
-            loadingIndicator.remove();
+            // 清除加载提示（如果存在）
+            if (loadingIndicator) {
+                loadingIndicator.remove();
+            }
             
             // 清除旧点云
             this.scene.children.slice().forEach(obj => {
@@ -332,12 +382,17 @@ class PointCloudViewer {
             
         } catch(error) {
             console.error('Failed to load PLY:', error);
-            loadingIndicator?.remove();
-            const errorMsg = document.createElement('div');
-            errorMsg.className = 'error-message';
-            errorMsg.innerHTML = 'Failed to load point cloud';
-            document.getElementById('viewport').appendChild(errorMsg);
-            setTimeout(() => errorMsg.remove(), 3000);
+            if (loadingIndicator) {
+                loadingIndicator.remove();
+            }
+            // 只在非预加载状态下显示错误信息
+            if (!this.isPreloading) {
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'error-message';
+                errorMsg.innerHTML = 'Failed to load point cloud';
+                document.getElementById('viewport').appendChild(errorMsg);
+                setTimeout(() => errorMsg.remove(), 3000);
+            }
         }
     }
 
