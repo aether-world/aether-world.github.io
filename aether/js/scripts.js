@@ -304,6 +304,11 @@ class PointCloudViewer {
             if (this.cache.has(url)) {
                 geometry = this.cache.get(url);
             } else {
+                // 清除当前显示的点云
+                this.scene.children.slice().forEach(obj => {
+                    if(obj instanceof THREE.Points) this.scene.remove(obj);
+                });
+                
                 // 只有当加载当前要显示的帧时才显示加载提示
                 if (!this.isPreloading) {
                     loadingIndicator = document.createElement('div');
