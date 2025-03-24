@@ -105,6 +105,9 @@ class PointCloudViewer {
         this.loadSequence(0);
 
         this.isInitialLoad = true; // 标志位，用于判断是否是第一次加载
+
+        // 预加载所有视频缩略图
+        this.preloadThumbnails();
     }
 
     initThreeJS() {
@@ -130,7 +133,7 @@ class PointCloudViewer {
         // 添加提示元素 - 放在上方
         const zoomHint = document.createElement('div');
         zoomHint.className = 'zoom-hint';
-        zoomHint.innerHTML = 'Hold Shift + Scroll to zoom'; // 英文提示
+        zoomHint.innerHTML = 'Left Mouse to rotate<br>'+ 'Hold Ctrl + Right Mouse to pan<br>' + 'Hold Shift + Scroll to zoom';
         zoomHint.style.display = 'none';
         document.getElementById('viewport').appendChild(zoomHint);
         
@@ -173,8 +176,45 @@ class PointCloudViewer {
         this.sequences.forEach((seq, index) => {
             const thumb = document.createElement('div');
             thumb.className = 'sequence-thumbnail';
-            // thumb.innerHTML = `<img src="${seq.thumbnail}">`;
-            thumb.innerHTML = `<video src="${seq.thumbnail}" autoplay loop muted playsinline>`;   //<video id="demoVideo" ></video>
+            
+            // 创建加载指示器
+            const thumbLoader = document.createElement('div');
+            thumbLoader.className = 'thumb-loader';
+            thumbLoader.innerHTML = '<div class="thumb-spinner"></div>';
+            thumb.appendChild(thumbLoader);
+            
+            // 创建视频元素
+            const video = document.createElement('video');
+            video.src = seq.thumbnail;
+            video.muted = true;
+            video.playsinline = true;
+            video.style.opacity = '0'; // 初始隐藏视频
+            
+            // 创建模糊的预览图（可以是视频第一帧的静态图像）
+            const previewImg = document.createElement('div');
+            previewImg.className = 'thumb-preview';
+            previewImg.style.backgroundImage = `url(${seq.thumbnailPreview || seq.thumbnail.replace('.mp4', '_preview.jpg')})`;
+            thumb.appendChild(previewImg);
+            
+            // 视频加载完成后
+            video.addEventListener('canplaythrough', () => {
+                // 移除加载指示器
+                thumbLoader.style.display = 'none';
+                // 显示视频
+                video.style.opacity = '1';
+                // 淡出预览图
+                previewImg.style.opacity = '0';
+                // 开始播放视频
+                video.play();
+                video.loop = true;
+            });
+            
+            // 视频加载失败处理
+            video.addEventListener('error', () => {
+                thumbLoader.innerHTML = '<div class="thumb-error">Error</div>';
+            });
+            
+            thumb.appendChild(video);
             thumb.onclick = () => this.loadSequence(index);
             container.appendChild(thumb);
         });
@@ -184,6 +224,59 @@ class PointCloudViewer {
             const frame = parseInt(e.target.value);
             document.getElementById('timeLabel').textContent = `Frame: ${frame}`;
             this.loadFrame(frame);
+        });
+
+        // 添加左右导航区域
+        const navButtons = document.createElement('div');
+        navButtons.className = 'navigation-buttons';
+        
+        const prevButton = document.createElement('div'); // 改为div以便更灵活地控制样式
+        prevButton.className = 'nav-area prev';
+        prevButton.innerHTML = '<div class="nav-arrow">&#10094;</div>'; // 箭头放在内部div中
+        prevButton.addEventListener('click', () => {
+            const timeline = document.getElementById('timeline');
+            const currentFrame = parseInt(timeline.value);
+            if (currentFrame > 0) {
+                timeline.value = currentFrame - 1;
+                this.loadFrame(currentFrame - 1);
+                document.getElementById('timeLabel').textContent = `Frame: ${currentFrame - 1}`;
+            }
+        });
+        
+        const nextButton = document.createElement('div');
+        nextButton.className = 'nav-area next';
+        nextButton.innerHTML = '<div class="nav-arrow">&#10095;</div>';
+        nextButton.addEventListener('click', () => {
+            const timeline = document.getElementById('timeline');
+            const currentFrame = parseInt(timeline.value);
+            const maxFrame = parseInt(timeline.max);
+            if (currentFrame < maxFrame) {
+                timeline.value = currentFrame + 1;
+                this.loadFrame(currentFrame + 1);
+                document.getElementById('timeLabel').textContent = `Frame: ${currentFrame + 1}`;
+            }
+        });
+        
+        navButtons.appendChild(prevButton);
+        navButtons.appendChild(nextButton);
+        document.getElementById('viewport').appendChild(navButtons);
+        
+        // 添加键盘导航
+        document.getElementById('viewport').tabIndex = 0; // 使viewport可聚焦
+        document.getElementById('viewport').addEventListener('keydown', (e) => {
+            const timeline = document.getElementById('timeline');
+            const currentFrame = parseInt(timeline.value);
+            const maxFrame = parseInt(timeline.max);
+            
+            if (e.key === 'ArrowLeft' && currentFrame > 0) {
+                timeline.value = currentFrame - 1;
+                this.loadFrame(currentFrame - 1);
+                document.getElementById('timeLabel').textContent = `Frame: ${currentFrame - 1}`;
+            } else if (e.key === 'ArrowRight' && currentFrame < maxFrame) {
+                timeline.value = currentFrame + 1;
+                this.loadFrame(currentFrame + 1);
+                document.getElementById('timeLabel').textContent = `Frame: ${currentFrame + 1}`;
+            }
         });
     }
 
@@ -341,6 +434,36 @@ class PointCloudViewer {
         requestAnimationFrame(() => this.animate());
         this.controls.update();
         this.renderer.render(this.scene, this.camera);
+    }
+
+    preloadThumbnails() {
+        // 创建一个隐藏的容器来预加载视频
+        const preloadContainer = document.createElement('div');
+        preloadContainer.style.display = 'none';
+        document.body.appendChild(preloadContainer);
+        
+        // 为每个序列创建预加载元素
+        this.sequences.forEach(seq => {
+            // 创建图像预加载
+            if (seq.thumbnailPreview) {
+                const img = new Image();
+                img.src = seq.thumbnailPreview;
+                preloadContainer.appendChild(img);
+            }
+            
+            // 创建视频预加载
+            const video = document.createElement('video');
+            video.src = seq.thumbnail;
+            video.muted = true;
+            video.preload = 'auto';
+            preloadContainer.appendChild(video);
+            
+            // 记录加载状态
+            seq.loaded = false;
+            video.addEventListener('canplaythrough', () => {
+                seq.loaded = true;
+            });
+        });
     }
 }
 
