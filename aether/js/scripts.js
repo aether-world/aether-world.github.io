@@ -77,7 +77,7 @@ class PointCloudViewer {
         this.sequences = [
             {
                 thumbnail: 'assets/seq1_thumb.jpg',
-                plyFiles: ['./assets/seq1/frame0.ply', './assets/seq1/frame3.ply']
+                plyFiles: ['./assets/seq1/frame0.ply','./assets/seq1/frame0.ply','./assets/seq1/frame0.ply','./assets/seq1/frame0.ply','./assets/seq1/frame0.ply', './assets/seq1/frame3.ply']
             },
             {
                 thumbnail: 'assets/seq1_thumb.jpg',
