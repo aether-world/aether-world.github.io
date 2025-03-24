@@ -159,8 +159,8 @@ class PointCloudViewer {
         
         // 加载第一个帧
         this.currentSequence = index;
-        this.loadFrame(0);
         this.isInitialLoad = true; // 标记为初始加载
+        this.loadFrame(0);
     }
 
     async loadFrame(frame) {
