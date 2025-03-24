@@ -828,3 +828,23 @@ body {
     pointer-events: none;
     z-index: 100;
 }
+
+/* 添加到style.css文件中 */
+.pointcloud-wrapper {
+    margin-top: 2rem;  /* 与tech-grid相同的上边距 */
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* 调整点云查看器容器的内边距 */
+#viewport {
+    margin-top: 0;
+    border-radius: 0;
+}
+
+/* 确保reconstruction部分与其他部分有相同的内边距 */
+#reconstruction.tech-details {
+    padding: 5rem 0;
+}
