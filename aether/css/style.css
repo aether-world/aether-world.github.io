@@ -1025,3 +1025,109 @@ body {
         font-size: 18px;
     }
 }
+
+/* 团队展示样式调整 */
+.team-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    flex-wrap: nowrap; /* 确保不会换行 */
+}
+
+/* 响应式调整 */
+@media (max-width: 1200px) {
+    .team-row {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .team-member-card {
+        margin-bottom: 20px;
+    }
+}
+
+.team-member-card {
+    width: 240px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: white;
+}
+
+.team-member-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.team-member-card img {
+    width: 100%;
+    height: 360px;
+    object-fit: cover;
+    display: block;
+}
+
+.member-info {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.member-info h4 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.member-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    color: #0066cc;
+    text-decoration: none;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.member-link:hover {
+    background: #0066cc;
+    color: white;
+}
+
+.member-link i {
+    font-size: 0.9rem;
+}
+
+/* 响应式调整 */
+@media (max-width: 1680px) {
+    .team-row {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 768px) {
+    .team-member-card {
+        width: 200px;
+    }
+    
+    .team-member-card img {
+        height: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .team-row {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .team-member-card {
+        width: 80%;
+        max-width: 240px;
+    }
+}

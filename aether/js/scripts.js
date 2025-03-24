@@ -601,3 +601,96 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const planningCarousel = new VideoCarousel('planning-carousel', planningVideos);
 });
+
+// 初始化团队展示
+document.addEventListener('DOMContentLoaded', function() {
+    // ... existing code ...
+    
+    // 初始化团队成员数据 - 重新排列为两排，每排5人
+    const firstRow = [
+        { image: 'assets/team/zhuhaoyi.jpg', name: '朱皓怡', link: 'https://www.haoyizhu.site' },
+        { image: 'assets/team/wangyifan.jpg', name: '王一凡', link: 'https://github.com/yyfz' },
+        { image: 'assets/team/zhoujianjun.jpg', name: '周健均', link: 'https://zhoutimemachine.github.io/' },
+        { image: 'assets/team/changwenzheng.jpg', name: '常文正', link: 'https://github.com/AmberHeart' },
+        { image: 'assets/team/zhouyang.jpg', name: '周洋', link: 'https://github.com/yangzhou24' }
+    ];
+    
+    const secondRow = [
+        { image: 'assets/team/lizizun.jpg', name: '李秭尊', link: 'https://github.com/LiZizun' },
+        { image: 'assets/team/chenjunyi.jpg', name: '陈俊佚', link: 'https://github.com/SOTAMak1r' },
+        { image: 'assets/team/shenchunhua.jpg', name: '沈春华', link: 'https://cshen.github.io/' },
+        { image: 'assets/team/pangjiangmiao.jpg', name: '庞江淼', link: 'https://oceanpang.github.io/' },
+        { image: 'assets/team/tonghe.jpg', name: '贺通', link: 'https://tonghe90.github.io' }
+    ];
+    
+    // 创建团队展示函数
+    function createTeamDisplay(containerId, firstRow, secondRow) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        
+        // 创建第一排
+        const firstRowSection = document.createElement('div');
+        firstRowSection.className = 'team-row';
+        
+        // 创建第二排
+        const secondRowSection = document.createElement('div');
+        secondRowSection.className = 'team-row';
+        
+        // 添加第一排成员
+        firstRow.forEach(member => {
+            const memberCard = createMemberCard(member);
+            firstRowSection.appendChild(memberCard);
+        });
+        
+        // 添加第二排成员
+        secondRow.forEach(member => {
+            const memberCard = createMemberCard(member);
+            secondRowSection.appendChild(memberCard);
+        });
+        
+        // 组装DOM
+        container.appendChild(firstRowSection);
+        container.appendChild(secondRowSection);
+    }
+    
+    // 创建成员卡片函数
+    function createMemberCard(member) {
+        const card = document.createElement('div');
+        card.className = 'team-member-card';
+        
+        const img = document.createElement('img');
+        img.src = member.image;
+        img.alt = member.name;
+        img.width = 240;
+        img.height = 360;
+        
+        const info = document.createElement('div');
+        info.className = 'member-info';
+        
+        const name = document.createElement('h4');
+        name.textContent = member.name;
+        
+        const link = document.createElement('a');
+        link.href = member.link;
+        link.target = '_blank';
+        link.className = 'member-link';
+        link.innerHTML = '<i class="fas fa-external-link-alt"></i>';
+        
+        info.appendChild(name);
+        info.appendChild(link);
+        
+        card.appendChild(img);
+        card.appendChild(info);
+        
+        return card;
+    }
+    
+    // 初始化团队展示
+    createTeamDisplay('team-display', firstRow, secondRow);
+    
+    // 添加Font Awesome图标支持
+    const fontAwesome = document.createElement('link');
+    fontAwesome.rel = 'stylesheet';
+    fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';
+    document.head.appendChild(fontAwesome);
+});
