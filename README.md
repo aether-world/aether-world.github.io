@@ -1,1 +1,1 @@
-# AetherWorldModel.github.io
+# aether-world.github.io
