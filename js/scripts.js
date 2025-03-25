@@ -704,6 +704,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const name = document.createElement('h4');
         name.textContent = member.name;
+        name.style.whiteSpace = 'nowrap';
         
         const link = document.createElement('a');
         link.href = member.link;
