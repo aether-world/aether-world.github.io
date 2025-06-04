@@ -46,6 +46,7 @@ body {
     text-decoration: none;
     color: #333;
     transition: color 0.3s ease;
+    line-height: 50px;
 }
 
 .nav-links a:hover {
@@ -1131,4 +1132,72 @@ body {
         width: 80%;
         max-width: 240px;
     }
+}
+
+/* Styles for the "More Research" Dropdown */
+.nav-links .dropdown {
+    position: relative; /* Establishes a positioning context for the dropdown content */
+    display: inline-block; /* Allows it to sit nicely with other nav items */
+    /* The parent .nav-links has align-items: center, which will help vertically align this. */
+}
+
+.nav-links .dropbtn {
+    background-color: transparent; /* Matches link background (navbar has its own bg) */
+    color: #333; /* Matches .nav-links a color */
+    padding: 0; /* Existing links don't show explicit padding; rely on font & line-height. Adjust if needed. */
+    font-size: inherit; /* Inherits font size from parent, like <a> tags do */
+    font-family: inherit; /* Inherits font family, like <a> tags do */
+    border: none;
+    cursor: pointer;
+    text-decoration: none; /* Matches .nav-links a text-decoration */
+    transition: color 0.3s ease; /* Matches .nav-links a transition */
+    line-height: normal; /* Ensure consistent line-height with <a> tags */
+    /* line-height: 50px; */
+}
+
+.nav-links .dropbtn:hover {
+    color: #0066cc; /* Matches .nav-links a:hover color */
+}
+
+.nav-links .dropdown-content {
+    display: none; /* Hidden by default */
+    position: absolute; /* Positioned relative to the .dropdown container */
+    top: 100%; /* Positions it right below the button. You might need to adjust this slightly (e.g., top: calc(100% + 5px);) if it feels too close. */
+    left: 50%; /* Start from the middle of the button */
+    transform: translateX(-50%); /* Center the dropdown under the button */
+    background-color: #f9f9f9; /* A light background for the dropdown */
+    min-width: 180px; /* Adjust as needed, or use 'auto'
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* Adds a subtle shadow */
+    z-index: 1001; /* Ensures it appears above other content (navbar is 1000) */
+    border-radius: 4px; /* Optional: rounded corners for the dropdown box */
+    padding: 5px 0; /* Optional: padding top/bottom inside the dropdown box */
+    /* margin-top: 8px; Adds a small gap between the button and the dropdown menu */
+}
+
+.nav-links .dropdown-content a {
+    color: black; /* Link color inside the dropdown */
+    padding: 0px 0px; /* Padding for each link within the dropdown */
+    text-decoration: none; /* Removes underline from links */
+    display: block; /* Makes the entire area of the link clickable */
+    text-align: center; /* Aligns text to the left, or use 'center' */
+    white-space: nowrap; /* Prevents link text from wrapping */
+    font-size: 1.0rem; /* Slightly smaller font for dropdown items, adjust as you like */
+    /* transition: background-color 0.2s ease, color 0.2s ease; remove if not needed */
+}
+
+.nav-links .dropdown-content a:hover {
+    background-color: #ddd; /* Background color on hover for dropdown links */
+    color: #333; /* Text color on hover for dropdown links */
+}
+
+/* Show the dropdown menu when hovering over the .dropdown container */
+.nav-links .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Optional: Keep the button highlighted or change style when dropdown is open and hovered */
+.nav-links .dropdown:hover .dropbtn {
+    /* color: #0066cc; */ /* This is already handled by general .dropbtn:hover */
+    /* You could add other styles here if you want the button to look different
+        ONLY when the dropdown is open AND the mouse is over the button area */
 }
